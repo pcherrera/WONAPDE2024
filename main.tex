@@ -1,0 +1,515 @@
+\documentclass[10pt]{beamer}
+% options: draft, compress, handout
+\usepackage{amsmath,amssymb,amsfonts,textcomp,amsthm,xifthen,psfrag,graphicx,color,MnSymbol}
+\usepackage{multicol}
+\usepackage[T1]{fontenc}
+\usepackage{svg}
+\usefonttheme{serif}
+\mode<presentation>
+{
+  \usetheme{AnnArbor} % not bad at all, rel. simple, sleek design
+  \setbeamercovered{transparent}
+  %gets rid of bottom navigation bars
+  %\setbeamertemplate{footline}[page number]{}   % page number
+  \setbeamertemplate{footline}[frame number]{}   % frame number
+  %gets rid of navigation symbols
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamercolor{block title}{bg=blue!30,fg=blue}
+}
+%\usepackage{appendixnumberbeamer}
+\input{header}
+\title[Short Title]{A DPG method for the quad-curl problem}
+%\subtitle{}
+
+\author{Pablo Herrera}
+\institute{P. Universidad Cat\'olica de Chile, Santiago, Chile}
+
+\date{{\footnotesize joint work with}\\[1em]
+      {\small Thomas~F\"uhrer, Norbert Heuer, UC}
+     }
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSection[]
+{\begin{frame}<beamer>{Outline}
+    %\tableofcontents
+    \tableofcontents[currentsection,currentsubsection]
+    %\tableofcontents[currentsubsection,sectionstyle=shaded,subsectionstyle=show]
+    %\tableofcontents[currentsection]
+ \end{frame}
+ \addtocounter{framenumber}{-1}
+}
+%\AtBeginSubsection[]
+%{\begin{frame}<beamer>{Outline}
+%    %\tableofcontents
+%    \tableofcontents[currentsection,currentsubsection]
+%    %\tableofcontents[currentsubsection,sectionstyle=shaded,subsectionstyle=show]
+%    %\tableofcontents[currentsection]
+% \end{frame}
+% \addtocounter{framenumber}{-1}
+%}
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Outline}
+    \tableofcontents
+\end{frame}
+\section{Motivation and model problem}
+\begin{frame}[t]{Stokes problem}
+\begin{block}{Stokes problem}
+    \begin{align*}
+        -\mu \Div \grad \bu + \grad p  &= \ff \quad \text{in} \quad \Omega, \\
+        \div \bu & = 0  \quad \text{in} \quad \Omega, \\
+        \hspace{5em}\centering{B.C}& \quad \text{on} \quad \Gamma:=\partial \Omega. 
+    \end{align*}
+\end{block}
+\pause 
+\begin{block}{Notation}
+\begin{itemize}
+    \item Velocity field $\bu$. 
+    \item Pressure $p$. 
+    \item Viscosity $\mu>0$. 
+    \item Forces $\ff$.
+    \item $\Div(\cdot) := (\div (\cdot) , \div (\cdot),..., \div (\cdot))^{\top}$. 
+    \item $\Curl (\cdot ) :=\grad(\cdot)^\perp $ and $(a,b)^\perp := (b,-a)$
+    \item $\rot(\cdot) := \div(\cdot)^\perp $
+\end{itemize}
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Quad-curl 2D problem} 
+Since $\div \bu = 0 $ we get $\bu = \Curl u$ with $u \in H^1_0(\Omega)$.  Hence,    
+\pause 
+\begin{align}
+        -\mu \Div \grad \curl u + \grad p  = \ff \quad \text{in} \quad \Omega, & \tag{*} \label{Stokes1}\\
+        \centering{B.C} \quad \text{on} \quad \Gamma:=\partial \Omega. &  \notag
+\end{align}
+Applying $\rot(\cdot )$ both sizes in \eqref{Stokes1} we obtain
+\pause 
+\begin{block}{Quad-curl 2D}
+    \begin{align*}
+        -\mu \rot \Div \grad \curl u &= \rot \ff \quad \text{in} \quad \Omega \\
+        \centering{B.C}& \quad \text{on} \quad \Gamma:=\partial \Omega.  \notag
+    \end{align*}
+\end{block}
+\pause 
+\centering{This a 2D version of $\curl\Delta \curl(\cdot) = \Curl^4(\cdot)$ 
+ operator!} \\
+ \pause
+ \centering{Also $\rot\Div \Grad \curl(\cdot)  = (\grad^\perp \div(\cdot)^\perp)^2$ ! }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Model problem}
+Notation:
+        \begin{align*}
+       &\Curl\bv:= \begin{cases} \grad\times\bv & (\di=3),\\ (\grad v)^\perp & (\di=2).\end{cases} \quad
+       &&\aCurl\bv := \begin{cases} \Curl\bv & (\di=3),\\ \rot\bv:=\div(\bv^\perp) & (\di=2).\end{cases} \\
+       &\grad^{*} \bv = -\div \bv, \quad &&\Grad^{*} \PP = -\Div \PP. 
+       \end{align*}
+    
+    \begin{block}{Model problem} Given $\gamma>0$ ($\gamma \geq 0$ in 2D) find $u$ such that
+    \begin{align*} 
+        \aCurl\Grad^{*} \Grad \Curl \bu +\gamma \bu &= \ff  \quad \text{in} \quad \Omega, \\
+        \nn \times \bu = \Curl \bu  &= 0 \quad \text{on} \quad \Gamma. \\
+    \end{align*}
+    \end{block}  
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Preliminaries}
+\begin{frame}[t]{DPG method \footnote[1]{L.Demkowicz, J.Gopalakrishnan, Comput. Methods Appl. Mech. Engrg. 2010. }}
+\emph{Find $\uu \in \UU$, such that}
+    \begin{align*}
+        b(\uu,\vv) = L(\vv)  \quad \forall \vv \in \VV.
+    \end{align*}
+$\ttt:\UU \to \VV$ is the \emph{trial to test} operator 
+\begin{align*}
+    \ip{\ttt\uu}{\vv}_{\VV} = b(\uu,\vv) \quad \forall \vv \in \VV.
+\end{align*}    
+Petrov-Galerkin Scheme:
+\emph{Find $\uu \in \UU_h$, such that}
+\begin{align*}
+    b(\uu_h,\vv) = L(\vv) \quad \forall \vv \in \cI(\UU_h) 
+\end{align*}
+DPG method is \textcolor{blue}{inf-sup stable} and converges \textcolor{blue}{optimally}
+\begin{align*}
+    \|\uu-\uu_h\|_{E} = \min_{\ww \in \UU_h} \|\uu-\ww\|_{E}, \quad \text{with} \quad \|\uu\|_{E} = \|B \uu\|_{\VV'}. 
+\end{align*}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Function spaces}
+\begin{itemize}
+\item Spaces
+\begin{align*}
+    &\LL_2^s(\Omega):=\{\QQ\in\LL_2(\Omega);\; \QQ=\QQ^\top\},\quad
+   \LL_2^\perp(\Omega):=\{\QQ\in\LL_2(\Omega);\; \mathrm{tr}(\QQ)=0\}, \\
+    &\HGradCurl{\Omega}:=\{\bv\in\bL_2(\Omega);\; \GCurl\bv\in\LL_2(\Omega)\},\\
+    &\HGradCurla{\Omega}:=
+   \begin{cases} \{\QQ\in\LL_2^\perp(\Omega);\; \GCurla\QQ\in\bL_2(\Omega)\} & (\di=3),\\
+                 \{\QQ\in\LL_2^\perp(\Omega);\; \rot\Div\QQ\in L_2(\Omega)\} & (\di=2).
+   \end{cases} \\
+   &\HGradCurlz{\Omega} =
+   \begin{cases}
+      \{\bv\in \HGradCurl{\Omega};\; \nn\times\bv|_{\Gamma}=\Curl\bv|_{\Gamma} = 0\} & (\di=3),\\
+      \{v\in H^2(\Omega);\; v|_{\Gamma}=0,\ \grad\!v|_{\Gamma}=0\} = H^2_0(\Omega)   & (\di=2).
+   \end{cases}
+\end{align*}  
+\item Norms 
+\begin{align*}
+        &\|\bv\|^2_{\Grad\Curl} := \|\bv\|_{\Omega}^2+\|\Grad\Curl \bv\|_{\Omega}^2, \quad
+        \|\QQ\|^2_{\GCurla} :=\|\QQ\|_{\Omega}^2+\|\GCurla \QQ\|_{\Omega}^2.
+\end{align*}
+\item Broken analogs
+\begin{align*}
+    \HGradCurl{\cT} = \prod_{T \in \cT} \HGradCurl{T} \quad \HGradCurla{\cT} = \prod_{T \in \cT} \HGradCurla{T}.
+\end{align*}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Trace Operators}
+\begin{itemize}
+\item Trace operators:
+We define $\tracegc{}:\HGradCurl{\Omega} \to \HGradCurla{\cT}'$  by
+\begin{align*}
+&\dualgc{\tracegc{}(\bu)}{\QQ}_{\cS}:= \vdual{\GCurl\bu}{\QQ}-\vdual{\bu}{\GCurla \QQ}_{\cT}   
+\end{align*}    
+and  $\tra{}:\HGradCurla{\Omega} \to \HGradCurl{\cT}'$ by
+\begin{align*}
+&\dualgca{\tra{}(\PP)}{\bv}_{\cS}:= \vdual{\GCurl\bv}{\PP}_{\cT}-\vdual{\bv}{\GCurla \PP}.
+\end{align*}
+\item Traces Norms : 
+\begin{align*}
+&\|\tbu\|_{\tGCurl,\cS } := \inf \{\|\bv\|_{\Grad \Curl};~\bv \in \Hgcurl{\Omega},~\tracegc{}(\bv)=\tbv  \},  \\
+&\|\tPP\|_{\tGCurla,\cS } : = \inf \{ \|\QQ\|_{\GCurla };~ \QQ \in \HGradCurla{\Omega},~\tra{}(\QQ)=\tQQ \},
+\end{align*}
+where $\tbu \in\tracegc{}(\HGradCurl{\Omega})$ and $\tPP \in \tra{}(\HGradCurla{\Omega})$.
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Ultraweak Formulation}
+\begin{frame}{Setting}
+\begin{itemize}
+\item Second order system: 
+\begin{align*}
+    \Curl^{*}\Grad^{*} \PP + \gamma \bu &= \ff, \\
+    \Grad\Curl \bu - \PP &= 0. 
+\end{align*}
+\item Trial and test spaces:
+\begin{align*}
+    &\UU = \bL_2(\Omega) \times \LL_2(\Omega) \times \tracegc{}(\HGradCurlz{\Omega}) \times \tra{}(\HGradCurla{\Omega}), \\
+    &\VV = \HGradCurl{\cT} \times \HGradCurla{\cT}.
+\end{align*}
+%\item Variables: 
+%\begin{align*}
+%    \uu :=(\bu,\PP,\tbu,\tPP) \in \UU, \quad 
+%    \vv :=(\vv,\QQ) \in \VV. 
+%\end{align*}
+\item Linear and bilinear forms: 
+    \begin{align*}   
+  & b(\bu,\PP,\tbu,\tPP;\vv,\QQ) = \vdual{\bu}{\gamma \bv+\GCurla\QQ}_{\cT}+\vdual{\PP}{\QQ-\Grad\Curl \bv }_{\cT} 
+  \\& \hspace{16 em} + \dualgca{\tPP}{\bv}_{\cS}+\dualgc{\tbu}{\QQ}_{\cS}, \\ 
+  &L(\vv,\QQ)=\vdual{\ff}{\bv}. 
+\end{align*}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Wellposedness}
+\begin{block}{Theorem (wellposedness)} There is a unique $(\bu,\PP,\tbu,\tPP;\vv,\QQ) \in \UU $ such that 
+\begin{align*}
+    b(\bu,\PP,\tbu,\tPP;\vv,\QQ) = L(\vv,\QQ) \quad \forall \vv \in \VV.  
+\end{align*}   
+Also 
+\begin{align*}
+    \|\bu\| + \|\PP\|+\|\tbu\|_{\tGCurl,\cS}+\|\tPP\|_{\tGCurla,\cS} \lesssim \|\ff\|.
+\end{align*}
+\end{block}
+To show this we use standard techniques. 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Stokes Problem in $\R^2$}
+\begin{frame}{Kirchoff--Love trace operators}
+We define $\traceGG{}:\;H^2(\Omega)\to\HdDiv{\cT}'$ by
+\begin{align*} 
+   \dualgg{\traceGG{}(v)}{\QQ}_\cS:=\vdual{v}{\div\Div\QQ}_\cT-\vdual{\Grad\grad v}{\QQ}
+\end{align*}
+and $\traceDD{}:\;\HdDiv{\Omega}\to H^2(\cT)'$ by 
+\begin{align*}
+   \dualdd{\traceDD{}(\QQ)}{v}_\cS:=\vdual{v}{\div\Div\QQ}-\vdual{\Grad\grad v}{\QQ}_\cT    
+\end{align*}
+
+\begin{block}{Lemma} The following relations are true  
+\begin{alignat*}{2}
+   &\vdual{\QQ}{\Grad\curl v}_\Omega = -\vdual{\QQ^\perp}{\Grad\grad v}_\Omega
+   &&\quad\forall\QQ\in\LL_2(\Omega),\ v\in H^2(\Omega), \\
+   &\rot\Div\QQ=\div\Div\QQ^\perp        &&\quad\forall \QQ\in\HrotDiv{\Omega}, \\
+   &\dual{\tracegc{}(v)}{\QQ}_\cS = \dual{\traceGG{}(v)}{\QQ^\perp}_\cS
+   &&\quad\forall v\in H^2(\Omega),\ \QQ\in\HrotDiv{\cT}, \\
+   &\dual{\tra{}(\QQ)}{v}_\cS = \dual{\traceDD{}(\QQ^\perp)}{v}_\cS
+   &&\quad\forall \QQ\in\HrotDiv{\Omega},\ v\in H^2(\cT).  
+\end{alignat*}
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Reformulation }
+\begin{itemize}
+\item Trial and test spaces:
+\begin{align*}
+   &\UU^\perp:=L_2(\Omega)\times\LL_2^s(\Omega)\times 
+   \tracegc{}(H^2_0(\Omega))\times \tra{}(\HdDiv{\Omega}) , \\ %\label{stokes_UU} \\
+   &\VV^\perp:=H^2(\cT)\times\HdDiv{\cT}. %\label{stokes_VV} 
+\end{align*}
+\item bilinear form
+\begin{align*} \label{b_Stokes}
+   b(\bu,\PP,\tbu,\tPP;\vv,\QQ) %&=
+   %-\vdual{u}{\rot\Div\QQ}_\cT + \vdual{\PP}{\QQ-\Grad\curl v}_\cT \\
+   %&\hspace{10em}  + \dualgc{\tu}{\QQ}_\cS + \dualgca{\tPP}{v}_\cS\nonumber\\
+   &=
+   -\vdual{u}{\div\Div\QQ^\perp}_\cT + \vdual{\PP^\perp}{\QQ^\perp+\Grad\grad v}_\cT \nonumber \\
+   & \hspace{10em} + \dualgg{\tu^\perp}{\QQ^\perp}_\cS + \dualdd{\tPP^\perp}{v}_\cS\nonumber\\
+   &=: b^\perp(u,\PP^\perp,\tu^\perp,\tPP^\perp;v,\QQ^\perp) 
+\end{align*}
+with 
+\[
+   \tu^\perp:=\traceGG{}(u) \quad\text{y}\quad \tPP^\perp:=\traceDD{}(\PP^\perp).
+\]
+\item Linear functional 
+\begin{align*}
+    L(v,\QQ^\perp) := (\rot \ff,v)_\Omega \quad \text{with} \quad \rot \ff \in H^{-1}(\Omega). 
+\end{align*}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Right-hand side}
+\begin{itemize}
+\item Problem
+\begin{center}
+ $L(v,\QQ^\perp)=(\rot \ff,v)_\Omega$ is not well defined for $v \in H^2(\cT)$ !        
+\end{center}
+\item Solution
+\begin{center}
+    Approximate $\rot \ff$ by a $L_2(\Omega)$ load !
+\end{center}
+\item Scott–Zhang-type quasi-interpolator 
+\begin{align*}
+  J_h:L_2(\Omega) \to \cP^{1}(\cT)\cap H^1_0(\Omega) \quad   J_h v = \sum_{\bx \in \cN_0} \vdual{v}{\psi_{\bx}}_{\Omega}\eta_{\bx}. 
+\end{align*}
+Where $\eta_{\bx} \in \cP^1(\cT)\cap H^1_0(\Omega)$ with $\eta_{\bx} (\bx')=\delta_{\bx,\bx'}$ and $\psi_{\bx} \in \cP^1(\cT)$ with $\vdual{\psi_{\bx}}{\eta_{\bx'}}_\Omega=\delta_{\bx,\bx'}$.
+\item Consider $B_h:L_2(\Omega) \to L_2(\Omega)$ defined by
+\begin{align*}
+    B_h v = \sum_{T \in \cT} (v,\chi_{T})_{\Omega}\eta_{b,T},
+\end{align*}
+where $\eta_{b,T} \in \cP^3(T)\cap H^1_0(\Omega)$ is bubble function.
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Right-hand side}
+\begin{itemize}
+    \item Approximation operator\footnote[1]{T. F\"uhrer, Math. Comp. 2021.}  $P_h':H^{-1}(\Omega) \to L_2(\Omega)$
+    \begin{align*}
+       P_h' v = J_h' v + (1-J_h')B_h'v \quad  J_h' \phi := \sum_{e \in \cN_0} \vdual{\phi}{\eta_e}\psi_e, \quad B_h' \phi :=\sum_{T \in \cT} \vdual{\phi}{\eta_{b,T}}\chi_T.
+\end{align*}
+\end{itemize}
+\begin{block}{Lemma [T. F\"uhrer, 2021]}The following properties holds
+\begin{enumerate} 
+    \item [a)] \textbf{Quasi-projection:} $P_h'\phi = \phi$ para todo $\phi \in \cP^0(\cT)$
+    \item [b)] \textbf{Approximation:} $\|(1-P_h')\phi\|_{-1}\lesssim \|h_\cT \phi \|$ for all $\phi \in L_2(\Omega)$ 
+    \item[c)] \textbf{Boundedness:} 
+    \begin{align*}
+        &\|P_h'\phi\|_T \lesssim \|\phi\|_{\Omega(T)} \quad \forall \phi \in L_2(\Omega)  \quad (T \in \cT), \\
+        &\|P_h'\phi\|_{-1}, \lesssim \|\phi\|_{-1} \quad \forall \phi \in H^{-1}(\Omega). 
+    \end{align*}
+\end{enumerate}    
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fully discrete Method}
+\begin{frame}{Discrete scheme}
+ \begin{itemize}
+     \item Approximated trial and test spaces \footnote[1]{T. F\"uhrer, N. Heuer, and A. Niemi, Math. Comp. 2019.  }
+     \begin{align*}
+         &\UU^\perp_h =\cP^1(\cT) \times \mathbb{P}^{0,s}(\cT)\times \tU^{\tGGrad}_{\cS} \times \tQ^{\tdDiv}_\cS,   \\
+         &\VV^\perp_h = \cP^3(\cT) \times \mathbb{P}^{4,s}(\cT).
+     \end{align*}
+     \item  Trial-to-test operator approximated. Let $\ttt_h^\perp:\UU_h^\perp \to \VV_h^\perp $ defined by
+    \begin{align*}
+        \ip{\ttt^\perp_h(\uu^\perp)}{\vv}_{\VV}=b(\uu^\perp,\vv^\perp) \quad \forall \vv^\perp \in \VV_h^\perp.
+    \end{align*}
+     \item Fully discrete squeme: Find $(u_h,\PP^\perp_h,\tu^\perp_h,\tPP^\perp_h) \in \UU^\perp_h$ s.t.
+     \begin{align*}
+     b^\perp(u,\PP^\perp,\tu^\perp,\tPP^\perp;v,\QQ^\perp)=L_h(v,\QQ^\perp) \quad \forall (v,\QQ^\perp) \in\ttt_h^\perp(\UU_h^\perp),
+     \end{align*}
+     where $L_h(v,\QQ^\perp)=\vdual{P_h'\rot \ff}{v}_\Omega$ for all $(v,\QQ^\perp) \in \VV$. 
+ \end{itemize}   
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{A priori estimates}
+    \begin{block}{Lemma} Given $u \in H^3(\Omega)$ and $\tu_h \in \tU^{\tGGrad}_\cS$, estimate 
+        \begin{align*}
+            \min_{\tu_h \in \tU^{\tGGrad}_\cS}
+   \|\traceGG{}(u) - \tu_h\|_{\tGGrad,\cS} \lesssim \|h_\cT\|_\infty \|u\|_{3}
+        \end{align*}
+    holds true with a hidden constant that only depends on the shape-regularity of $\cT$.    
+    \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{A priori estimates}
+\begin{itemize}
+    \item Regularity shift 
+    \begin{align*}
+        s \in (0,1]: \Delta^{-1}: L_2(\Omega) \to H^{1+s}(\Omega) \cap H^1_0(\Omega).
+    \end{align*}
+\end{itemize}
+\begin{block}{Proposition} Let $\Omega$ a regular polygonal domain with regularity shift $s$. Given $\PP \in \HdDiv{\Omega}\cap \HH^1(\Omega)$, estimate
+\begin{align*}
+   \min_{\tPP_h \in \tQ^{\tdDiv}_\cS}
+   \|\traceDD{}(\PP) - \tPP_h\|_{\tdDiv,\cS}
+   \lesssim \|h_\cT\|_\infty \|\PP\|_1 + \|h_\cT\|_\infty^{1+s} \|\div\Div\PP\|
+\end{align*}  
+holds true with a hidden constant that only depends on the shape-regularity of $\cT$.
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Fortin operators}
+    \begin{itemize}
+        \item Fortin operator $\Pi^{\tGGrad}:H^2(\cT) \to \cP^3(\cT)$  for $H^2(\cT)$
+        \item Fortin operator $\Pi^{\tdDiv}:\;\HdDiv{\cT}\to \mathbb{P}^{4}(\cT)$ for $\HdDiv{\cT}$\footnote[1]{T. F\"uhrer, N. Heuer, Comput. Methods Appl. Mech. Engrg. 2019.  }
+        \item Fortin operator for $\VV^\perp_h$ $\Pi_F =(\Pi^{\tGGrad},\Pi^{\tdDiv})$.
+    \end{itemize}
+    \begin{block}{Theorem} Let $\Omega$ a polygonal regular domain  with regularity shift $s>0$. The fully discrete DPG scheme with Fortin operator $\Pi_F$ has a unique solution $\uu_h^\perp = (u_h,\PP^\perp_h,\tu^\perp_h,\tPP^\perp_h)$ and the following assertions holds
+    \begin{itemize}
+        \item[a)] if $\ff \in \bL_2(\Omega)$ then 
+        \begin{align*}
+            \|u-u_h\|_{\Omega}+\|\PP-\PP_h\|_{\Omega}+\|\tbu-\tbu_h\|_{\tGCurl,\cS} \lesssim \|h_\cT\|_{\infty}^s\|\ff\|_\Omega 
+        \end{align*}
+        \item[b)] if $\rot \ff \in L_2(\Omega)$ then 
+        \begin{align*}
+            \|u-u_h\|_{\Omega} \lesssim \|h_\cT\|_{\infty}^{s+1} (\|\rot \ff\|_{\Omega} +\|\ff\|_{\Omega})
+        \end{align*}
+    \end{itemize}
+        
+    \end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Numerical Results}
+\begin{frame}{Smooth solution}
+    \begin{figure}
+        \centering
+        \includegraphics[width=15em]{plots_stokes.pdf}
+        \caption{Manufactured solution $u(x,y)=\sin(\pi x)^2 \sin(\pi y)^2$, $\ff = -\Delta \curl u$, $\bu=\curl u$ }
+        \label{fig:enter-label}
+    \end{figure}
+Let $h \simeq \dim \UU_h^{-1/2}$
+\begin{align*}
+    \|u-u_h\|_\Omega = \cO(h^2), \quad \|\bu-\bu_h\|_\Omega = \cO(h), \quad \|\PP^\perp-\PP_h^\perp\| = \cO(h).
+\end{align*}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Lid-driven cavity flow}
+Consider $\Omega =(0,1)^2$
+    \begin{align*}
+  u|_\Gamma = 0, \quad \partial_{\nn}u(x,y) = 
+  \begin{cases}
+    \phi(x) & \text{si} \quad  y=1, \\
+    0 & \text{else},
+  \end{cases}
+\end{align*}
+
+\begin{align*}
+  \phi(x) = \begin{cases}
+    1-\tfrac14\left(1-\cos(\tfrac{0.1-x}{0.1}\pi)\right)^2 & x\in[0,0.1], \\
+    1 & x\in(0.1,0.9), \\
+    1-\tfrac14\left(1-\cos(\tfrac{x-0.9}{0.1}\pi)\right)^2& x\in[0.9,1].
+  \end{cases}
+\end{align*}
+
+\begin{align*}
+  \bu(x,y)|_\Gamma = \begin{cases}
+    (\phi(x),0)^\top & y=1, \\
+    0 & \text{else}.
+  \end{cases}
+\end{align*}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ Lid-driven cavity flow}
+\begin{figure}
+  \begin{center}
+  \includegraphics[width=0.35\textwidth]{plots_stokes2.pdf}
+  \includegraphics[width=0.35\textwidth]{LidDrivenVfield.png}
+    \includegraphics[width=0.35\textwidth]{LidDrivenVortexBig.png}
+    \includegraphics[width=0.35\textwidth]{LidDrivenVortexSmall.png}
+  \end{center}
+\end{figure}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Flow in channel with backward step}
+$\Omega=(0,10)\times (-1,1)\setminus [0,2]\times[-1,0]$ 
+\begin{align*}
+  \partial_{\nn} u|_\Gamma = 0, \quad
+  u(x,y)|_\Gamma = \begin{cases}
+    -\frac{(2y+1)(y-1)^2}6 & x=0, \\
+    -\frac{(y-1)^2(y+2)}{24} & x=10, \\ 
+    0 & y = 1, \\
+    -\frac16 & \text{en otro caso}.
+  \end{cases}
+\end{align*}
+\begin{align*}
+  \bu(x,y)|_\Gamma = \begin{pmatrix}
+  u_1(x,y) \\ 0\end{pmatrix}, 
+  \quad u_1(x,y) = \begin{cases}
+    y(1-y) & x=0, \\
+    \frac{(y+1)(1-y)}8 & x=10, \\
+    0 &\text{else}.
+  \end{cases}
+\end{align*}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Flow in channel with backward step}
+  \begin{figure}
+      \centering
+      \includegraphics[width=0.65\textwidth]{StepVfield2.png}
+      \includegraphics[width=0.65\textwidth]{StepVfield3.png}
+      \includegraphics[width=0.65\textwidth]{StepVfield4.png}
+      \includegraphics[width=0.65\textwidth]{StepVfield5.png}
+      %\caption{Caption}
+      \label{fig:enter-label}
+  \end{figure}  
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Singular solution}
+    Singular solution, $\Omega=(0,1)^2$, $u(x,y)=|x-y|^\alpha \sin(\pi x)^2\sin(\pi y)^2$ with $\alpha = 2.01$
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\textwidth]{plots_stokes3.pdf}
+        \caption{Caption}
+        \label{fig:enter-label}
+    \end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{References}
+\begin{thebibliography}{99}
+\bibitem{FHH23} T. Führer, P. Herrera and N. Heuer.
+\newblock A DPG method for the quad-curl problem.
+\newblock {\em Comput. Math. Appl.}, 149:221-238, 2023.
+
+\bibitem{FHN19}
+T. F\"uhrer, N. Heuer, and A. H. Niemi. 
+\newblock An ultraweak formulation of the Kirchhoff–Love plate bending model
+and DPG approximation. 
+\newblock {\em Math. Comp.}, 88:1587--1619, 2019.
+
+\bibitem{FH19} T. F\"uhrer and N. Heuer. 
+\newblock Fully discrete DPG methods for the Kirchhoff–Love plate bending model. 
+\newblock {\em Comput.
+Methods Appl. Mech. Engrg.}, 343:550--571, 2019.
+
+
+\bibitem{DG10} L. F. Demkowicz and J. Gopalakrishnan. 
+\newblock A class of discontinuous Petrov–Galerkin methods. Part ii. optimal test functions.
+\newblock {\em Numer. Methods Partial Differential Equations.}, 27 (1):70--105, 2011. 
+ \end{thebibliography}
+\end{frame}
+\end{document}

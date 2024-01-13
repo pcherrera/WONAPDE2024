@@ -1,0 +1,430 @@
+%\oddsidemargin 0.5cm
+%\textwidth     16cm
+%\textheight    20cm
+%\setlength\parindent{0pt}
+
+%\newtheorem{theorem}{Teorema}
+\newtheorem{cor}[theorem]{Corolario}
+\newtheorem{prop}[theorem]{Proposición}
+\newtheorem{remark}[theorem]{Nota}
+\newtheorem{hip}[theorem]{Hipótesis}
+
+\newtheorem{algorithm}[theorem]{Algoritmo}
+
+%
+\newcommand{\ndof}{\#\mathrm{dof}}
+%----------------------------------------------------------------------------------
+\DeclareFontFamily{U}{matha}{\hyphenchar\font45}
+\DeclareFontShape{U}{matha}{m}{n}{
+      <5> <6> <7> <8> <9> <10> gen * matha
+      <10.95> matha10 <12> <14.4> <17.28> <20.74> <24.88> matha12
+      }{}
+\DeclareSymbolFont{matha}{U}{matha}{m}{n}
+\DeclareFontSubstitution{U}{matha}{m}{n}
+
+% Math symbol font mathb
+\DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
+\DeclareFontShape{U}{mathx}{m}{n}{
+      <5> <6> <7> <8> <9> <10>
+      <10.95> <12> <14.4> <17.28> <20.74> <24.88>
+      mathx10
+      }{}
+\DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
+\DeclareFontSubstitution{U}{mathx}{m}{n}
+
+% Symbol definition
+\DeclareMathDelimiter{\vvvert}{0}{matha}{"7E}{mathx}{"17}
+
+
+
+%-------------------------------------------------------------------------------
+\newcommand{\<}{\langle{}}
+\renewcommand{\>}{\rangle}
+\newcommand{\ip}[2]{\llangle#1\hspace*{.5mm},#2\rrangle}
+\newcommand{\dual}[2]{\<#1\hspace*{.5mm},#2\>}
+\newcommand{\dualg}[2]{\<#1\hspace*{.5mm},#2\>^\nabla}
+\newcommand{\duald}[2]{\<#1\hspace*{.5mm},#2\>^\mathrm{div}}
+\newcommand{\dualgd}[2]{\<#1\hspace*{.5mm},#2\>^{\nabla\mathrm{div}}}
+\newcommand{\dualcc}[2]{\<#1\hspace*{.5mm},#2\>^{\Curl^2}}
+\newcommand{\dualgg}[2]{\<#1\hspace*{.5mm},#2\>^{\Grad\grad}}
+\newcommand{\dualdd}[2]{\<#1\hspace*{.5mm},#2\>^{\Div\div}}
+\newcommand{\dualgc}[2]{\<#1\hspace*{.5mm},#2\>^{\Grad\Curl}}
+\newcommand{\dualgca}[2]{\<#1\hspace*{.5mm},#2\>^{\GCurla}}
+\newcommand{\dualRM}[3]{\<#1\hspace*{.5mm},#2\>_{#3}}
+\newcommand{\vdual}[2]{(#1\hspace*{.5mm},#2)}
+%\newcommand{\abs}[1]{\vert #1 \vert}
+%\newcommand{\norm}[2]{\|#1\|_{#2}}
+%\newcommand{\snorm}[2]{|#1|_{#2}}
+
+\renewcommand{\skew}[1]{\mathrm{skew}(#1)}
+\newcommand{\diam}{\mathrm{diam}}
+\newcommand{\wilde}{\widetilde}
+\newcommand{\wat}{\widehat}
+\newcommand{\transp}{\mathsf{T}}
+
+\newcommand{\cQ}{{c_Q}}
+\newcommand{\cQinv}{{c_Q^{-1}}}
+\newcommand{\Cdisp}{{\mathbf{C}_\mathrm{disp}}}
+\newcommand{\Cdispt}{{\mathbf{C}_\mathrm{disp}^2}}
+\newcommand{\Cdispinv}{{\mathbf{C}_\mathrm{disp}^{-1}}}
+\newcommand{\Cdispinvt}{{\mathbf{C}_\mathrm{disp}^{-2}}}
+\newcommand{\cdisp}{{c_\mathrm{disp}}}
+%\newcommand{\cdefl}{c_\mathrm{defl}}
+
+\newcommand{\Grad}{\boldsymbol{\nabla}}
+\newcommand{\sGrad}{\boldsymbol{\varepsilon}}
+\newcommand{\kGrad}{{\boldsymbol{\nabla}'}}
+\newcommand{\pwkGrad}{{\boldsymbol{\nabla}_\cT'}}
+\def\pwGrad{\boldsymbol{\nabla}_\cT}
+\def\pwsGrad{\boldsymbol{\varepsilon}_\cT}
+\def\Div{{\rm\bf Div\,}}
+\def\pwDiv{{\rm\bf div}_\cT}
+\def\grad{\nabla}
+\def\pwgrad{\nabla_\cT}
+\def\GG{\mathbf{G}}
+\def\MM{\mathbf{M}}
+\def\SS{\mathbf{S}}
+\def\BB{\mathbf{B}}
+\def\DD{\mathbb{D}}
+\def\NN{\mathbf{N}}
+\def\TT{\mathbf{T}}
+\def\WW{\mathbf{W}}
+\def\ZZ{\mathbf{Z}}
+\def\II{\mathbf{I}}
+\def\QQ{\mathbf{Q}}
+\def\PP{\mathbf{P}}
+\def\KK{\mathbf{K}}
+\def\bQ{\mathbf{Q}}
+\newcommand{\bC}{\boldsymbol{\mathcal{C}}}
+\newcommand{\CC}{\boldsymbol{C}}
+\def\bR{\boldsymbol{R}}
+\def\TTheta{\mathbf{\Theta}}
+\def\bq{\boldsymbol{q}}
+\def\rr{\mathbf{r}}
+\def\bz{\boldsymbol{z}}
+\def\Amat{\boldsymbol{A}}
+\def\Bmat{\boldsymbol{B}}
+\def\Cmat{\boldsymbol{C}}
+
+\newcommand{\cRT}{\mathcal{RT}}
+\newcommand{\cL}{\ensuremath{\mathcal{L}}}
+\newcommand{\bL}{\ensuremath{\boldsymbol{L}}}
+\newcommand{\LL}{\ensuremath{\mathbb{L}}}
+%\def\tQ{\wat{\boldsymbol{q}}}
+\def\tq{\wat{\boldsymbol{q}}}
+%\def\tT{\wat{\boldsymbol{\theta}}}
+\def\btheta{\boldsymbol{\theta}}
+\def\bbeta{\boldsymbol{\beta}}
+\def\bkappa{\boldsymbol{\kappa}}
+\def\CDiv{\mathrm{CDiv}}
+\DeclareMathOperator{\GCurl}{\Grad\Curl}
+\DeclareMathOperator{\rot}{rot}
+\DeclareMathOperator{\Rot}{{\bf rot}}
+\DeclareMathOperator{\scurl}{\mathrm{sym}\curl}
+
+
+\DeclareMathOperator{\aGrad}{\boldsymbol{\nabla^{\textmd{*}}\!}} % formal adjoint
+\DeclareMathOperator{\aCurl}{\mathbf{curl^*\!}} % formal adjoint
+\DeclareMathOperator{\gcurl}{\grad\curl}
+\DeclareMathOperator{\gcurla}{-\curl\div} % formal adjoint
+\DeclareMathOperator{\GCurla}{\aCurl\aGrad} % formal adjoint
+
+
+
+\def\tbg{\wat{\boldsymbol{g}}}
+\def\tbu{\wat{\boldsymbol{u}}}
+\def\tu{{\hat u}}
+\def\dtu{{\delta\!\hat u}}
+\def\tbw{\wat{\boldsymbol{w}}}
+\def\tbv{\wat{\boldsymbol{v}}}
+\def\tsigma{\wat{\boldsymbol{\sigma}}}
+\def\tphi{\wat{\boldsymbol{\phi}}}
+\def\tv{\hat{v}}
+\def\tbv{\hat{\boldsymbol{v}}}
+\def\ttau{\hat{\tau}}
+\def\tw{\wat{w}}
+\def\tz{\wat{z}}
+\def\tWW{\wat{\mathbf{w}}}
+\def\tQQ{\wat{\mathbf{q}}}
+\def\tPP{\wat{\mathbf{p}}}
+\def\tGCurl{\mathrm{GCurl}}
+\def\tgrad{\mathrm{grad}}
+\def\tGGrad{\mathrm{Ggrad}}
+\def\tdDiv{\mathrm{dDiv}}
+\def\tGCurla{\mathrm{GCurl}^{*}}
+\def\tCCurl{\mathrm{CCurl}}
+\def\dWW{\boldsymbol{\delta}\WW}
+\def\tTTheta{\wat{\mathbf{\Theta}}}
+%\newcommand{\EE}{\ensuremath{\mathbb{E}}}
+\def\EE{\mathbf{E}}
+\def\JJ{\mathbf{J}}
+\newcommand{\eeta}{{\boldsymbol\eta}}
+\newcommand{\bcP}{\boldsymbol{\mathcal{P}}}
+\newcommand{\bg}{\boldsymbol{g}}
+\newcommand{\bm}{\boldsymbol{m}}
+\newcommand{\br}{\boldsymbol{r}}
+\newcommand{\bj}{\boldsymbol{j}}
+\newcommand{\bl}{\boldsymbol{l}}
+\newcommand{\TPP}{\boldsymbol{\mathbb{P}}}
+\newcommand{\bp}{\boldsymbol{p}}
+\newcommand{\bv}{\boldsymbol{v}}
+\newcommand{\bvref}{\boldsymbol{v}_{\mathrm{ref}}}
+\newcommand{\dbv}{\boldsymbol{\delta\!v}}
+\newcommand{\bu}{\boldsymbol{u}}
+\newcommand{\bx}{\boldsymbol{x}}
+\newcommand{\bw}{\boldsymbol{w}}
+\newcommand{\dbu}{\boldsymbol{\delta\!u}}
+\newcommand{\dtbu}{\boldsymbol{\delta\!\hat u}}
+\newcommand{\dQQ}{{\boldsymbol{\delta}\!\QQ}}
+\newcommand{\uone}{{\boldsymbol{u}_1}}
+\newcommand{\utwo}{{u_2}}
+\newcommand{\uthree}{{\boldsymbol{u}_3}}
+\newcommand{\ufour}{{u_4}}
+
+\newcommand{\tuone}{{\hat u_1}}
+\newcommand{\tutwo}{{\hat u_2}}
+\newcommand{\tuthree}{{\hat u_3}}
+\newcommand{\tufour}{{\hat u_4}}
+
+\newcommand{\wone}{{\boldsymbol{w}_1}}
+\newcommand{\wtwo}{{w_2}}
+\newcommand{\wthree}{{\boldsymbol{w}_3}}
+\newcommand{\wfour}{{w_4}}
+
+
+\newcommand{\twone}{{\hat w_1}}
+\newcommand{\twtwo}{{\hat w_2}}
+\newcommand{\twthree}{{\hat w_3}}
+\newcommand{\twfour}{{\hat w_4}}
+
+\newcommand{\vone}{{\boldsymbol{v}_1}}
+\newcommand{\vtwo}{{v_2}}
+\newcommand{\vthree}{{\boldsymbol{v}_3}}
+\newcommand{\vfour}{{v_4}}
+
+\newcommand{\dvone}{{\boldsymbol{\delta\!v}_1}}
+\newcommand{\dvtwo}{{\delta\!v_2}}
+\newcommand{\dvthree}{{\boldsymbol{\delta\!v}_3}}
+\newcommand{\dvfour}{{\delta\!v_4}}
+
+\newcommand{\gone}{{\boldsymbol{g}_1}}
+\newcommand{\gtwo}{{g_2}}
+\newcommand{\gthree}{{\boldsymbol{g}_3}}
+\newcommand{\gfour}{{g_4}}
+
+%\newcommand{\uu}{\ensuremath{\mathbf{u}}}
+\newcommand{\uu}{\mathfrak{u}}
+\renewcommand{\gg}{\mathfrak{g}}
+\newcommand{\pp}{\mathfrak{p}}
+\newcommand{\duu}{\delta\!\mathfrak{u}}
+\newcommand{\tuu}{\wat{\mathfrak{u}}}
+
+\newcommand{\deltavv}{\delta\!\vv}
+\newcommand{\deltauu}{\delta\!\uu}
+%\newcommand{\vv}{\ensuremath{\mathbf{v}}}
+\newcommand{\vv}{\mathfrak{v}}
+%\newcommand{\ww}{\ensuremath{\mathbf{w}}}
+\newcommand{\ww}{\mathfrak{w}}
+\newcommand{\UBC}[1]{{U_{#1}}}
+\newcommand{\UU}{\ensuremath{\mathfrak{U}}}
+\newcommand{\tUU}{\ensuremath{\mathfrak{\wat U}}}
+%\newcommand{\VV}{\ensuremath{\mathcal{V}}}
+\newcommand{\VV}{\ensuremath{\mathfrak{V}}}
+\newcommand{\VVBC}[1]{\ensuremath{\mathfrak{V}_{#1}}}
+
+\newcommand{\kk}{\ensuremath{\mathbf{k}}}
+\newcommand{\ttheta}{\ensuremath{\boldsymbol{\theta}}}
+\newcommand{\bsigma}{\ensuremath{\boldsymbol{\sigma}}}
+\newcommand{\brho}{\ensuremath{\boldsymbol{\rho}}}
+\newcommand{\bpsi}{\ensuremath{\boldsymbol{\psi}}}
+\newcommand{\bphi}{\ensuremath{\boldsymbol{\phi}}}
+\newcommand{\PPhi}{\ensuremath{\boldsymbol{\Phi}}}
+\newcommand{\XXi}{\ensuremath{\boldsymbol{\Xi}}}
+\newcommand{\bxi}{\ensuremath{\boldsymbol{\xi}}}
+\newcommand{\bchi}{\ensuremath{\boldsymbol{\chi}}}
+\newcommand{\bvarphi}{\ensuremath{\boldsymbol{\varphi}}}
+
+\newcommand{\deltatuu}{\delta\!\wat{\mathfrak{u}}}
+\newcommand{\deltaw}{\delta\!w}
+\newcommand{\du}{\delta\!u}
+\newcommand{\deltaz}{\delta\!z}
+\newcommand{\deltarho}{\delta\!\rho}
+\newcommand{\deltaeta}{\delta\!\eta}
+\newcommand{\deltabr}{{\boldsymbol{\delta}\!\br}}
+\newcommand{\deltabq}{\boldsymbol{\delta}\!\bq}
+\newcommand{\deltabu}{{\boldsymbol{\delta}\!\bu}}
+\newcommand{\deltabv}{{\boldsymbol{\delta}\!\bv}}
+\newcommand{\DeltaTheta}{\boldsymbol{\delta}\!\TTheta}
+\newcommand{\deltatau}{\boldsymbol{\delta}\!\btau}
+\newcommand{\Deltaq}{\boldsymbol{\delta}\!\QQ}
+%\newcommand{\bdeltaq}{\boldsymbol{\delta}\!\bq}
+\newcommand{\deltaq}{\boldsymbol{\delta}\!\tq}
+\newcommand{\deltaKK}{\boldsymbol{\delta}\!\mathbf{K}}
+\newcommand{\deltaJJ}{\boldsymbol{\delta}\!\mathbf{J}}
+\newcommand{\deltaMM}{\boldsymbol{\delta}\!\mathbf{M}}
+\newcommand{\deltaSS}{\boldsymbol{\delta}\!\mathbf{S}}
+\newcommand{\deltaQQ}{\boldsymbol{\delta}\!\mathbf{Q}}
+\newcommand{\deltaPP}{\boldsymbol{\delta}\!\mathbf{P}}
+\newcommand{\deltaNN}{\boldsymbol{\delta}\!\mathbf{N}}
+\newcommand{\deltaTT}{\boldsymbol{\delta}\!\mathbf{T}}
+
+
+\newcommand{\trace}[2]{\mathrm{tr}_{#2}^{#1}}
+\newcommand{\traceg}[1]{\mathrm{tr}_{#1}^{\mathrm{grad}}}
+\newcommand{\traced}[1]{\mathrm{tr}_{#1}^{\mathrm{div}}}
+\newcommand{\tracegd}[1]{\mathrm{tr}_{#1}^{\grad\mathrm{div}}}
+\newcommand{\tracecc}[1]{\mathrm{tr}_{#1}^{\mathrm{Ccurl}}}
+\newcommand{\tracegc}[1]{\mathrm{tr}_{#1}^{\mathrm{GCurl}}}
+\newcommand{\tracecd}[1]{\mathrm{tr}_{#1}^{\mathrm{Cdiv}}}
+\newcommand{\tra}[1]{\mathrm{tr}_{#1}^{\mathrm{GCurl}^*}}
+\newcommand{\traceGG}[1]{\mathrm{tr}_{#1}^{\mathrm{Ggrad}}} %{-3/2,-1/2}}
+\newcommand{\Tref}{{\wat T}}
+\newcommand{\pPFgd}[1]{{\widetilde\Pi^{\grad\mathrm{div}}_{#1}}}
+\newcommand{\PFgd}[1]{{\Pi^{\grad\mathrm{div}}_{#1}}}
+
+
+
+\newcommand{\ddualT}[2]{\<#1\hspace*{.5mm};#2,\grad #2\>_{\partial T}}
+\newcommand{\ddual}[2]{\<#1\hspace*{.5mm};#2,\pwgrad #2\>_S}
+\newcommand{\ddualt}[2]{\<#1\hspace*{.5mm};#2,\grad #2\>_S}
+
+\newcommand{\err}{\mathrm{err}}
+\newcommand{\est}{\mathrm{est}}
+
+\newcommand{\trgrad}[1]{{\mathrm{grad},#1}}
+\newcommand{\trdiv}[1]{{\mathrm{div},#1}}
+
+\def\tr{\mathrm{tr}}
+\def\pwnabla{\nabla_\cT\,}
+\def\curl{{\rm curl\,}}
+\def\rot{{\rm rot\,}}
+\def\Rot{{\bf rot\,}}
+\DeclareMathOperator{\supp}{{\mathrm{supp}}}
+\DeclareMathOperator{\bcurl}{{\bf curl}}
+\def\Curl{{\bf curl\,}}
+\def\div{{\rm div\,}}
+\def\divwo{{\rm div}}
+\def\pwdiv{ {\rm div}_\cT\,}
+\def\intr{{\rm int}}
+\def\gint{{\gamma_1^\intr}}
+\newcommand{\jump}[1]{[#1]}
+\newcommand{\jumpRM}[2]{[#1]_{\mathrm{RM},#2}}
+\newcommand{\jjump}[1]{\lsem #1\rsem}
+\newcommand{\hp}{{hp}}
+\def\uc{u^c}
+\def\Omc{\Omega^c}
+\newcommand{\resnorm}[1]{\vvvert #1 \vvvert}
+
+
+\newcommand{\dDiv}{{\div\Div\!}}
+\newcommand{\HGradcurl}[1]{{H(\Grad\curl,#1)}}
+\newcommand{\HrotDiv}[1]{{\HH(\rot\Div,#1)}}
+
+\newcommand{\HGradCurl}[1]{{\bH(\Grad\Curl,#1)}}
+\newcommand{\HGradCurla}[1]{{\HH(\aCurl\aGrad,#1)}}
+\newcommand{\HGradCurlz}[1]{{\bH_0(\Grad\Curl,#1)}}
+\newcommand{\Hdiv}[1]{{\bH(\div\!,#1)}}
+\newcommand{\HDiv}[1]{{\HH(\Div\!,#1)}}
+\newcommand{\Hcurl}[1]{{\bH(\bcurl,#1)}}
+\newcommand{\Hcurlz}[1]{{\bH_0(\bcurl,#1)}}
+\newcommand{\Hdivz}[1]{{\bH_0(\div\!,#1)}}
+\newcommand{\Hgdiv}[1]{{\bH(\grad\div\!,#1)}}
+\newcommand{\Hgdivz}[1]{{\bH_0(\grad\div\!,#1)}}
+\newcommand{\Hccurl}[1]{{\bH(\boldsymbol{\curl}^2\!,#1)}}
+\newcommand{\Hccurlz}[1]{{\bH_0(\boldsymbol{\curl}^2\!,#1)}}
+\newcommand{\Hgcurl}[1]{{\bH(\Grad \boldsymbol{\curl}\!,#1)}}
+\newcommand{\Hgcurlz}[1]{{\bH_0(\Grad\boldsymbol{\curl}\!,#1)}}
+\newcommand{\HDcurl}[1]{{\bH(\boldsymbol{\curl}\Div \!,#1)}}
+\newcommand{\HDcurlz}[1]{{\bH_0(\Div \boldsymbol{\curl}\!,#1)}}
+\newcommand{\Htwocurl}[1]{{\bH^2(\boldsymbol{\curl}\!,#1)}}
+\newcommand{\Htwocurlz}[1]{{\bH_0^2(\boldsymbol{\curl}\!,#1)}}
+\newcommand{\trHgd}[1]{{\bH^{\grad\div}(#1)}}
+\newcommand{\trHgc}[1]{{\bH^{\grad\Curl}(#1)}}
+\newcommand{\trHgcz}[1]{{\bH_{0}^{\grad\Curl}(#1)}}
+\newcommand{\trHgca}[1]{{\bH^{\GCurla}(#1)}}
+\newcommand{\trHcd}[1]{{\bH^{\Curl\Div}(#1)}}
+\newcommand{\trHgdz}[1]{{\bH_{0}^{\grad\div}(#1)}}
+\newcommand{\trHcc}[1]{{\bH^{\Curl^2}(#1)}}
+\newcommand{\trHccz}[1]{{\bH_{0}^{\Curl^2}(#1)}}
+\newcommand{\U}[1]{U_{#1}}
+\newcommand{\HH}{\ensuremath{\mathbb{H}}}
+\newcommand{\bH}{\ensuremath{\boldsymbol{H}}}
+\newcommand{\trGrad}[1]{{\mathrm{Grad},#1}}
+\newcommand{\trggrad}[1]{{\mathrm{Ggrad},#1}}
+\newcommand{\trDiv}[1]{{\mathrm{Div},#1}}
+\newcommand{\trddiv}[1]{{\mathrm{dDiv},#1}}
+\newcommand{\trSK}[1]{{\mathrm{sK},#1}}
+\newcommand{\trSKD}[1]{{\mathrm{sK},D,#1}}
+\newcommand{\trSKN}[1]{{\mathrm{sK},N,#1}}
+\newcommand{\tracepsi}[1]{\mathrm{tr}_{#1}^\psi}
+\newcommand{\traceM}[1]{\mathrm{tr}_{#1}^M}
+\newcommand{\traceDD}[1]{\mathrm{tr}_{#1}^{\mathrm{dDiv}}} %{-3/2,-1/2}}
+\newcommand{\traceDDn}{\mathrm{tr}^{\mathrm{dDiv,n}}} %{-3/2,-1/2}}
+
+
+\newcommand{\ttt}{{\mathfrak{T}}}
+\def\tangent{\bt}
+
+\newcommand{\di}{d}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\cH}{\ensuremath{\mathcal{H}}}
+\newcommand{\cI}{\ensuremath{\mathcal{I}}}
+\newcommand{\nn}{\ensuremath{\boldsymbol{n}}}
+\newcommand{\ff}{\boldsymbol{f}}
+\newcommand{\kkappa}{\ensuremath{\boldsymbol{\kappa}}}
+\newcommand{\qq}{\ensuremath{\boldsymbol{q}}}
+\newcommand{\zz}{\ensuremath{\boldsymbol{z}}}
+\newcommand{\cg}{{\bar c}}
+\newcommand{\cC}{\ensuremath{\mathcal{C}}}
+\newcommand{\cD}{\ensuremath{\mathcal{D}}}
+\newcommand{\cCinv}{\ensuremath{\mathcal{C}^{-1}}}
+%\newcommand{\ep}{\varepsilon}
+\newcommand{\ep}{\mathfrak{e}}
+\newcommand{\cT}{\ensuremath{\mathcal{T}}}
+\newcommand{\tQ}{\ensuremath{\wat{Q}}}
+\newcommand{\tU}{\ensuremath{\wat{U}}}
+\newcommand{\cHH}{\ensuremath{\boldsymbol{\mathcal{H}}}}
+\newcommand{\cPP}{\ensuremath{\boldsymbol{\mathcal{P}}}}
+\newcommand{\cO}{\ensuremath{\mathcal{O}}}
+\newcommand{\bT}{\ensuremath{\mathbf{T}}}
+\newcommand{\cS}{\ensuremath{\mathcal{S}}}
+\newcommand{\cR}{\ensuremath{\mathcal{R}}}
+\newcommand{\sS}{\ensuremath{\mathbf{S}}}
+\newcommand{\el}{\ensuremath{T}}
+\newcommand{\ed}{\ensuremath{e}}
+\newcommand{\bt}{\ensuremath{\mathbf{t}}}
+\newcommand{\cP}{\ensuremath{\mathcal{P}}}
+\newcommand{\OO}{\ensuremath{\mathcal{O}}}
+\newcommand{\cE}{\ensuremath{\mathcal{E}}}
+\newcommand{\cF}{\ensuremath{\mathcal{F}}}
+\newcommand{\cN}{\ensuremath{\mathcal{N}}}
+\newcommand{\cM}{\ensuremath{\mathcal{M}}}
+
+\def\bB{\boldsymbol{B}}
+\def\bE{\boldsymbol{E}}
+\def\bj{\boldsymbol{j}}
+%*** vector functions
+\newcommand{\btau}{{\boldsymbol\tau}}
+\newcommand{\dbtau}{{\boldsymbol{\delta\!\tau}}}
+\renewcommand{\qq}{{\boldsymbol{q}}}
+\newcommand{\xx}{{\boldsymbol{x}}}
+
+\newcommand{\pw}{\text{pw}}
+\newcommand{\jn}{\text{jn}}
+
+\def\comment#1{{\color{blue}\tt (#1)}}
+\def\mk#1{{\color{red}{#1}}}
+%\def\nh#1{{#1}}
+\def\note#1{{\color{red}(Note:}{#1}{\color{red}end)}}
+\def\nh#1{{\color{red}{#1}}}
+\def\new#1{{\color{blue}{#1}}}
+\def\tf#1{{\color{blue}{#1}}}
+
+\newcommand{\HdDiv}[1]{{\HH(\dDiv,#1)}}
+\newcommand{\HdDivz}[1]{{\HH_0(\dDiv,#1)}}
+\newcommand{\HdDivBC}[2]{{\HH_{{#2}}(\dDiv,#1)}}
+\newcommand{\smoothfun}[1]{\mathcal{C}_0^{\infty}(#1)}
+\newcommand{\smoothvec}[1]{\boldsymbol{\mathcal{C}}_0^{\infty}(#1)}
+\newcommand{\smoothten}[1]{\mathbf{C}_0^{\infty}(#1)}
+
